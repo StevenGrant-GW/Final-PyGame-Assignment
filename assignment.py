@@ -102,7 +102,8 @@ game_state = "MENU"
 
 
 # *********GAME LOOP**********
-while True:
+running = True
+while running:
     # *********EVENTS**********
     ev = pygame.event.poll()    # Look for any event
     if ev.type == pygame.QUIT:  # window close button clicked?
@@ -125,6 +126,12 @@ while True:
             player_y -= player_speed
         if keys[pygame.K_s]:
             player_y += player_speed
+
+    elif game_state == "GAMEOVER":
+        if keys[pygame.K_r]:
+            score, game_state, player_x, player_y = 0, "GAME", 385, 285
+        if keys[pygame.K_ESCAPE]:
+            running = False
 
 
     # *********GAME LOGIC**********
@@ -155,11 +162,15 @@ while True:
         player_rect = pygame.Rect(player_x, player_y, player_size, player_size)
         target_rect = pygame.Rect(target_x, target_y, target_size, target_size)
 
-
+        # Checks if the player touches the target to increase score and move the target
         if player_rect.colliderect(target_rect):
             score += 1
             target_x = random.randint(0, windowWidth - target_size)
             target_y = random.randint(0, windowHeight - target_size)
+
+        # Checks if the player touches the obstacle to trigger a game over
+        if player_rect.collidepoint(obs_x, obs_y):
+            game_state = "GAMEOVER"
    
     # *********DRAW THE FRAME**********
     window.fill((0, 0, 0))
@@ -168,13 +179,16 @@ while True:
     if game_state == "MENU":
         # Render surfaces
         title_surf = title_font.render("SQUARE COLLECTOR", True, (255, 255, 255))
+        instr_surf = font.render("Touch the green square for points and avoid the Orange Circle!", True, (255, 255, 255))
         start_surf = font.render("Press SPACE to Start", True, (200, 200, 200))
        
         # Draw centered text by calculating (Center - Half Width)
-        title_pos = (windowWidth // 2 - title_surf.get_width() // 2, windowHeight // 3)
-        start_pos = (windowWidth // 2 - start_surf.get_width() // 2, windowHeight // 2)
+        title_pos = (windowWidth // 2 - title_surf.get_width() // 2, windowHeight // 4)
+        instr_pos = (windowWidth // 2 - instr_surf.get_width() // 2, windowHeight // 2 - 20)
+        start_pos = (windowWidth // 2 - start_surf.get_width() // 2, windowHeight // 2 + 60)
        
         window.blit(title_surf, title_pos)
+        window.blit(instr_surf, instr_pos)
         window.blit(start_surf, start_pos)
 
 
@@ -193,6 +207,25 @@ while True:
         # Draw the score
         score_text = font.render(f"Score: {score}", True, (255, 255, 255))
         window.blit(score_text, (20, 20))
+
+    elif game_state == "GAMEOVER":
+        # Render surfaces
+        over_surf = title_font.render("GAME OVER", True, (255, 0, 0))
+        final_score_surf = font.render(f"Final Score: {score}", True, (255, 255, 255))
+        restart_surf = font.render("Press R to Restart", True, (200, 200, 200))
+        quit_surf = font.render("Press Escape to Quit", True, (150, 150, 150))
+
+        # Position surfaces
+        over_pos = (windowWidth // 2 - over_surf.get_width() // 2, windowHeight // 4)
+        score_pos = (windowWidth // 2 - final_score_surf.get_width() // 2, windowHeight // 2 - 40)
+        restart_pos = (windowWidth // 2 - restart_surf.get_width() // 2, windowHeight // 2 + 40)
+        quit_pos = (windowWidth // 2 - quit_surf.get_width() // 2, windowHeight // 2 + 90)
+
+        # Draw surfaces
+        window.blit(over_surf, over_pos)
+        window.blit(final_score_surf, score_pos)
+        window.blit(restart_surf, restart_pos)
+        window.blit(quit_surf, quit_pos)
 
 
     # *********SHOW THE FRAME TO THE USER**********
