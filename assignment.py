@@ -2,7 +2,7 @@
 -----------------------------------------------------------------------------
 Program Name: Square Collecter
 Program Description: Move a red square to collect green targets while avoiding
-an orange bouncing obstacle. Features a start menu and score system.
+an orange bouncing obstacle. Features a start menu and score system an end screen.
 -----------------------------------------------------------------------------
 References:
 https://github.com/tczkqq/dvd-corner/blob/master/dvd-corner.py
@@ -89,7 +89,7 @@ title_font = pygame.font.SysFont("Arial", 72, bold=True)
 
 
 # Variables for Obstacle
-obs_radius = 15
+obs_radius = 25
 obs_x = random.randint(obs_radius, windowWidth - obs_radius)
 obs_y = random.randint(obs_radius, windowHeight - obs_radius)
 obs_x_speed = 4
@@ -167,6 +167,14 @@ while running:
             score += 1
             target_x = random.randint(0, windowWidth - target_size)
             target_y = random.randint(0, windowHeight - target_size)
+
+        # Every 3 points, increase the absolute speed of the obstacle by 1
+            if score > 0 and score % 3 == 0:
+                if obs_x_speed > 0: obs_x_speed += 1
+                else: obs_x_speed -= 1
+                
+                if obs_y_speed > 0: obs_y_speed += 1
+                else: obs_y_speed -= 1
 
         # Checks if the player touches the obstacle to trigger a game over
         if player_rect.collidepoint(obs_x, obs_y):
