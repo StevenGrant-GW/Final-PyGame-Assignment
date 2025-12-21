@@ -8,6 +8,7 @@ References:
 https://github.com/tczkqq/dvd-corner/blob/master/dvd-corner.py (used to help me make the obstacle)
 https://www.pygame.org/docs/ref/rect.html (used in how i made collisions)
 https://realpython.com/python-f-strings/ (taught me how to use f-strings to make the score system)
+https://docs.python.org/3/library/os.path.html (how i learned to use os.path to find locations for things)
 (put a link to your reference here but also add a comment in the code below where you used the reference)
 
 
@@ -76,11 +77,15 @@ pygame.display.set_caption("Square Collector")
 clock = pygame.time.Clock()  #will allow us to set framerate
 
 # *********LOAD ASSETTS*********
-coin_pickup = pygame.mixer.Sound("Pickup9.WAV")
-obstacle_hit = pygame.mixer.Sound("Hit4.WAV")
-game_start = pygame.mixer.Sound("Blip9.WAV")
-font_file = "PressStart2P-Regular.ttf"
-bg_img = pygame.image.load("background.jpg")
+image_folder = "images"
+
+coin_pickup = pygame.mixer.Sound(os.path.join(image_folder, "Pickup9.WAV"))
+obstacle_hit = pygame.mixer.Sound(os.path.join(image_folder, "Hit4.WAV"))
+game_start = pygame.mixer.Sound(os.path.join(image_folder, "Blip9.WAV"))
+
+font_file = os.path.join(image_folder, "PressStart2P-Regular.ttf")
+
+bg_img = pygame.image.load(os.path.join(image_folder, "background.jpg"))
 bg_img = pygame.transform.scale(bg_img, (windowWidth, windowHeight))
 
 # Variables for the player character
