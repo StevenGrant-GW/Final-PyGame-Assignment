@@ -69,7 +69,7 @@ current_path = os.path.dirname(__file__)
 os.chdir(current_path)
 
 # *********SETUP**********
-
+#Sets the window size and name
 windowWidth = 800
 windowHeight = 600
 window = pygame.display.set_mode((windowWidth, windowHeight))
@@ -77,14 +77,18 @@ pygame.display.set_caption("Square Collector")
 clock = pygame.time.Clock()  #will allow us to set framerate
 
 # *********LOAD ASSETTS*********
+#sets the variable to find the image folder
 image_folder = "images"
 
+#finds the sound effects and connects them to a variable
 coin_pickup = pygame.mixer.Sound(os.path.join(image_folder, "Pickup9.WAV"))
 obstacle_hit = pygame.mixer.Sound(os.path.join(image_folder, "Hit4.WAV"))
 game_start = pygame.mixer.Sound(os.path.join(image_folder, "Blip9.WAV"))
 
+#finds the font in the image folder
 font_file = os.path.join(image_folder, "PressStart2P-Regular.ttf")
 
+#finds the background image and scales it
 bg_img = pygame.image.load(os.path.join(image_folder, "background.jpg"))
 bg_img = pygame.transform.scale(bg_img, (windowWidth, windowHeight))
 
@@ -137,14 +141,15 @@ while running:
         break                   #   ... leave game loop
    
     # PUT YOUR MOUSE/KEYBOARD EVENTS HERE
+    #sets the variable keys to mean key getting pressed
     keys = pygame.key.get_pressed()
-   
+ # sets the what keys have meaning for the menu
     if game_state == "MENU":
         if keys[pygame.K_SPACE]:
             game_start.play()
             game_state = "GAME"
 
-
+# sets the what keys have meaning for the game
     elif game_state == "GAME":
         if keys[pygame.K_a]:
             player_x -= player_speed
@@ -155,6 +160,7 @@ while running:
         if keys[pygame.K_s]:
             player_y += player_speed
 
+ # sets the what keys have meaning for the game over
     elif game_state == "GAMEOVER":
         if keys[pygame.K_r]:
             reset_game()
@@ -213,7 +219,7 @@ while running:
     # *********DRAW THE FRAME**********
     window.fill((0, 0, 0))
 
-
+    #renders the game for the menu
     if game_state == "MENU":
         # Render surfaces
         title_surf = title_font.render("SQUARE COLLECTOR", True, (255, 255, 255))
@@ -236,7 +242,7 @@ while running:
         window.blit(instr3_surf, instr3_pos)
         window.blit(start_surf, start_pos)
 
-
+#renders the game for the gameplay
     elif game_state == "GAME":
         #Draw the background image
         window.blit(bg_img, (0, 0))
@@ -256,6 +262,7 @@ while running:
         score_text = font.render(f"Score: {score}", True, (255, 255, 255))
         window.blit(score_text, (20, 20))
 
+ #renders the game for the game over
     elif game_state == "GAMEOVER":
         # Render surfaces
         over_surf = title_font.render("GAME OVER", True, (255, 0, 0))
